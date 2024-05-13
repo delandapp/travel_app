@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:travelapp/book_flight_page.dart';
-import 'package:travelapp/landing_page.dart';
-import 'package:travelapp/search_flight_page.dart';
+import 'package:travelapp/pages/home_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,16 +15,10 @@ class MyApp extends StatelessWidget {
       title: 'Travel App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: const Color.fromRGBO(64, 147, 206, 100),
-        primarySwatch: Colors.blue
+        fontFamily: 'RedditSans',
+        scaffoldBackgroundColor: Colors.white,
       ),
-      initialRoute: '/landingpage',
-      routes: {
-        LandingPage.nameRoute:(context) => LandingPage(),
-        BookFlightPage.nameRoute:(context) => BookFlightPage(),
-        SearchFlightPage.nameRoute:(context) => SearchFlightPage(),
-      },
-      home: LandingPage(),
+      home: HomePages(),
     );
   }
 }

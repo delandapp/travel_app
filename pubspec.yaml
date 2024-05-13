@@ -59,6 +59,13 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+  fonts:
+    - family: PoetsenOne
+      fonts:
+        - asset: fonts/PoetsenOne-Regular.ttf
+    - family: RedditSans
+      fonts:
+        - asset: fonts/RedditSans-Regular.ttf
 
   # To add assets to your application, add an assets section, like this:
   # assets:
