@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:travelapp/class/travel.dart';
 import 'package:travelapp/core/color.dart';
 import 'package:travelapp/data/data.dart';
+import 'package:travelapp/pages/detail_page.dart';
 
 class HomePages extends StatefulWidget {
   String negeraSelected;
@@ -11,9 +13,16 @@ class HomePages extends StatefulWidget {
 
   @override
   State<HomePages> createState() => _HomePagesState();
+
+  
 }
 
 class _HomePagesState extends State<HomePages> {
+  @override
+  void dispose() { 
+    super.dispose();
+    
+  }
   @override
   Widget build(BuildContext context) {
     print(widget.negeraSelected);
@@ -144,15 +153,46 @@ class _HomePagesState extends State<HomePages> {
                     .map((e) => Padding(
                           padding: const EdgeInsets.only(right: 20),
                           child: CardTravelCountry(
-                            namaKota: e.location,
-                            namaWisata: e.name,
-                            gambarWisata: e.image,
-                            lokasiWisata: e.location,
-                            hargaWisata: e.price,
+                            travel: e,
                           ),
                         ))
                     .toList(),
               ),
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            const Text(
+              "Popular Kategori",
+              style: TextStyle(fontFamily: 'PoetsenOne', fontSize: 20),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              height: 70,
+              child: ListView.separated(itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {},
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            color: SecondaryColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: categories[index].icon,
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Text(categories[index].name,style: const TextStyle(fontSize: 10, color: Colors.black),)
+                    ],
+                  ),
+                );
+              }, separatorBuilder: (context, index) => const SizedBox(width: 40,), itemCount: categories.length,scrollDirection: Axis.horizontal,),
+
             )
           ],
         ),
@@ -161,63 +201,72 @@ class _HomePagesState extends State<HomePages> {
   }
 }
 
-class CardTravelCountry extends StatelessWidget {
-  String namaKota, namaWisata, gambarWisata, lokasiWisata, hargaWisata;
+class CardTravelCountry extends StatefulWidget {
+  Travel travel;
   CardTravelCountry({
     super.key,
-    required this.namaKota,
-    required this.namaWisata,
-    required this.gambarWisata,
-    required this.lokasiWisata,
-    required this.hargaWisata,
+    required this.travel
   });
 
   @override
+  State<CardTravelCountry> createState() => _CardTravelCountryState();
+}
+
+class _CardTravelCountryState extends State<CardTravelCountry> {
+  @override
   Widget build(BuildContext context) {
-    print(namaKota);
-    return Stack(
-      children: [
-        Container(
-          width: 210,
-          height: 270,
-          child: Image.network(gambarWisata, fit: BoxFit.fill),
-        ),
-        Positioned(
-          bottom: 0,
-          left: 10,
-          right: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    FittedBox(
-                      child: Text(
-                        "$namaWisata , $namaKota",
-                        style: const TextStyle(fontSize: 10, color: Colors.white),
-                      ),
-                    ),
-                    Text(
-                      "Harga mulai, $hargaWisata",
-                      style: TextStyle(
-                          fontSize: 8,
-                          color: Colors.grey[200]!,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.favorite),
-                color: Colors.white,
-              ),
-            ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(travel: widget.travel,)));
+      },
+      child: Stack(
+        children: [
+          Container(
+            width: 210,
+            height: 270,
+            child: Image.network(widget.travel.image, fit: BoxFit.fill),
           ),
-        ),
-      ],
+          Positioned(
+            bottom: 0,
+            left: 10,
+            right: 0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      FittedBox(
+                        child: Text(
+                          "${widget.travel.name} , ${widget.travel.location}",
+                          style: const TextStyle(fontSize: 10, color: Colors.white),
+                        ),
+                      ),
+                      Text(
+                        "Harga mulai, ${widget.travel.price}",
+                        style: TextStyle(
+                            fontSize: 8,
+                            color: Colors.grey[200]!,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      widget.travel.isFavorit = !widget.travel.isFavorit;
+                    });
+                  },
+                  icon: const Icon(Icons.favorite),
+                  color: widget.travel.isFavorit ? Colors.red : Colors.white,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
